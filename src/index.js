@@ -8,24 +8,27 @@ import { FronteggProvider } from '@frontegg/react';
 
 const contextOptions = {
   baseUrl: 'https://[YOUR_SUBDOMAIN].frontegg.com',
-  clientId: '[YOUR-CLIENT-ID]'
+  clientId: '[YOUR-CLIENT-ID]',
+
+  tenantResolver: () => ({
+    tenant: new URLSearchParams(window.location.search).get("organization"),
+  }),
 };
 
-
 const authOptions = {
- // keepSessionAlive: true // Uncomment this in order to maintain the session alive
+ keepSessionAlive: true, // refreshes the JWT once it reaches 80% expiration time
 };
 
 // For react 18: 
 // const root = ReactDOM.createRoot(document.getElementById('root'));
 // root.render(
-ReactDOM.render(
-    <FronteggProvider 
-      contextOptions={contextOptions}
-      hostedLoginBox={true}
-      authOptions={authOptions}
-      entitlementsOptions={{ enabled: true }}
-    >
+ReactDOM.render(  
+  <FronteggProvider 
+    contextOptions={contextOptions}
+    hostedLoginBox={false}
+    authOptions={authOptions}
+    entitlementsOptions={{ enabled: true }}
+  >
         <App />
     </FronteggProvider>,
     document.getElementById('root')
